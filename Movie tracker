@@ -1,0 +1,89 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MovieTrackerApp());
+}
+
+class MovieTrackerApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Movie Tracker',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: MovieListScreen(),
+    );
+  }
+}
+
+class Movie {
+  String title;
+  bool watched;
+  bool planned;
+
+  Movie({required this.title, this.watched = false, this.planned = false});
+}
+
+class MovieListScreen extends StatefulWidget {
+  @override
+  _MovieListScreenState createState() => _MovieListScreenState();
+}
+
+class _MovieListScreenState extends State<MovieListScreen> {
+  List<Movie> movies = [
+    Movie(title: "Inception"),
+    Movie(title: "Interstellar"),
+    Movie(title: "Avatar"),
+    Movie(title: "The Godfather"),
+    Movie(title: "The Dark Knight"),
+  ];
+
+  void _toggleWatched(int index) {
+    setState(() {
+      movies[index].watched = !movies[index].watched;
+    });
+  }
+
+  void _togglePlanned(int index) {
+    setState(() {
+      movies[index].planned = !movies[index].planned;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Movie Tracker'),
+      ),
+      body: ListView.builder(
+        itemCount: movies.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(movies[index].title),
+            subtitle: Row(
+              children: [
+                Checkbox(
+                  value: movies[index].watched,
+                  onChanged: (value) {
+                    _toggleWatched(index);
+                  },
+                ),
+                Text('Watched'),
+                SizedBox(width: 10),
+                Checkbox(
+                  value: movies[index].planned,
+                  onChanged: (value) {
+                    _togglePlanned(index);
+                  },
+                ),
+                Text('Planned'),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
